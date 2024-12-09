@@ -23,16 +23,16 @@ def county_to_data(county: BeautifulSoup) -> (str, list[int]):
     for candidate in candidates.find_all("tr"):
         name, party, votes, *other = candidate.find_all("td")
         party = party.find("div").text
+        print(votes.find("div"))
         votes = votes.find("div").find("span").text
-        print(party, votes)
-        
 
 
 def main():
     url = "https://www.nbcnews.com/politics/2024-elections/" \
     "arizona-us-house-district-2-results"
-    driver = webdriver.Firefox()
+    driver = webdriver.Chrome()
     driver.get(url)
+    driver.execute_script('document.title')
     html = driver.page_source
     soup = BeautifulSoup(html)
     counties = soup_to_counties(soup)
