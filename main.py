@@ -36,7 +36,7 @@ def main():
     html = driver.page_source
     soup = BeautifulSoup(html)
     counties = soup_to_counties(soup)
-    print(county_to_data(counties[0]))
+    county_to_data(counties[0])
 
 
 if __name__ == "__main__":
