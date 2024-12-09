@@ -1,5 +1,4 @@
 from bs4 import BeautifulSoup
-import pandas as pd
 import requests
 
 
@@ -24,8 +23,13 @@ def general_to_info(general: BeautifulSoup) -> (str, int):
 def county_to_data(county: BeautifulSoup) -> (str, list[int]):
     general, votes, *other = county.find_all("div")
     table = votes.find("div").find("table")
-    df = pd.DataFrame(table)
-    return df
+    candidates = table.find("tbody")
+    for candidate in candidates.find_all("tr"):
+        name, party, votes, *other = candidate.find_all("td")
+        party = party.find("div").text
+        votes = votes.find("div").find("span").text
+        print(party, votes)
+        
 
 
 def main():
