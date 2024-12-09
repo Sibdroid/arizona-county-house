@@ -1,10 +1,6 @@
 from bs4 import BeautifulSoup
+from selenium import webdriver
 import requests
-
-
-def url_to_soup(url: str) -> BeautifulSoup:
-    text = requests.get(url).text
-    return BeautifulSoup(text, features="lxml")
 
 
 def soup_to_counties(soup: BeautifulSoup) -> list[BeautifulSoup]:
@@ -35,7 +31,10 @@ def county_to_data(county: BeautifulSoup) -> (str, list[int]):
 def main():
     url = "https://www.nbcnews.com/politics/2024-elections/" \
     "arizona-us-house-district-2-results"
-    soup = url_to_soup(url)
+    driver = webdriver.Firefox()
+    driver.get(url)
+    html = driver.page_source
+    soup = BeautifulSoup(html)
     counties = soup_to_counties(soup)
     print(county_to_data(counties[0]))
 
