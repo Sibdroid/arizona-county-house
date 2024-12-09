@@ -26,7 +26,7 @@ def county_to_data(county: BeautifulSoup) -> (str, list[int]):
     table = votes.find("div").find("table")
     candidates = table.find("tbody")
     for candidate in candidates.find_all("tr"):
-        name, party, votes, *other = candidate.find_all("td")
+        candidate_name, party, votes, *other = candidate.find_all("td")
         party = party.find("div").text
         votes = votes.find("div").find("span").text
         votes = int(votes.replace(" ", "").replace(u'\xa0', u''))
@@ -48,7 +48,8 @@ def main():
     html = driver.page_source
     soup = BeautifulSoup(html)
     counties = soup_to_counties(soup)
-    print(county_to_data(counties[0]))
+    for i in counties:
+        print(county_to_data(i))
 
 
 if __name__ == "__main__":
