@@ -1,5 +1,6 @@
-import requests
 from bs4 import BeautifulSoup
+import pandas as pd
+import requests
 
 
 def url_to_soup(url: str) -> BeautifulSoup:
@@ -23,7 +24,8 @@ def general_to_info(general: BeautifulSoup) -> (str, int):
 def county_to_data(county: BeautifulSoup) -> (str, list[int]):
     general, votes, *other = county.find_all("div")
     table = votes.find("div").find("table")
-    return table
+    df = pd.DataFrame(table)
+    return df
 
 
 def main():
