@@ -12,13 +12,18 @@ def soup_to_counties(soup: BeautifulSoup) -> list[BeautifulSoup]:
                         attrs={"data-testid": "county-row"})
 
 
-def county_to_data(county: BeautifulSoup) -> (str, list[int]):
-    general, votes, *other = county.find_all("div")
+def general_to_info(general: BeautifulSoup) -> (str, int):
     name, *other, total_vote_count, percentage = general.find_all("span")
     name = name.find("span").text
     total_vote_count = total_vote_count.text
-    return name, total_vote_count
+    total_vote_count = total_vote_count.replace(" votes", "").replace(",", "")
+    return name, int(total_vote_count)
 
+
+def county_to_data(county: BeautifulSoup) -> (str, list[int]):
+    general, votes, *other = county.find_all("div")
+    table = votes.find("div").find("table")
+    return table
 
 
 def main():
