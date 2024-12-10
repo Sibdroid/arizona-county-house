@@ -36,18 +36,17 @@ def county_to_data(county: BeautifulSoup) -> (str, list[int]):
         elif party == "R":
             rep += votes
     return name, dem, rep, total
-            
 
 
-def main():
+def district_results_to_data(state: str, district: int):
     url = "https://www.nbcnews.com/politics/2024-elections/" \
-    "arizona-us-house-district-2-results"
+    f"{state}-us-house-district-{district}-results"
     driver = webdriver.Chrome()
     driver.get(url)
     driver.execute_script('document.title')
     time.sleep(3)
     element = driver.find_element("id",
-                        "house-2-results-table-toggle")
+                        f"house-{district}-results-table-toggle")
     actions = ActionChains(driver)
     actions.move_to_element(element).click().perform()
     time.sleep(3)
@@ -55,9 +54,22 @@ def main():
     soup = BeautifulSoup(html)
     counties = soup_to_counties(soup)
     for i in counties:
-        print(county_to_data(i))
+        yield county_to_data(i)
     driver.close()
+    
+    
 
+def main():
+    COUNTY_DICT = {}
+    for result in district_results_to_data("arizona", "2"):
+        name, *votes = result
+        for key, vote in zip([f"{name} D", f"{name} R", f"{name} Total"],
+                             votes):
+            try:
+                COUNTY_DICT[key] += vote
+            except KeyError:
+                COUNTY_DICT[key] = vote
+    print(COUNTY_DICT)
 
 
 if __name__ == "__main__":
