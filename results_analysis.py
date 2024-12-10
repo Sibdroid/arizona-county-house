@@ -1,5 +1,6 @@
 import json
 import pandas as pd
+import sys
 
 
 def list_to_unique_list(list_: list) -> list:
@@ -15,14 +16,16 @@ def list_to_unique_list(list_: list) -> list:
 
 
 def _clear_county(name: str) -> str:
-    for i in ["D", "R", "Total"]:
+    for i in [" D", " R", " Total"]:
         name = name.replace(i, "")
     return name.strip()
 
 
 def main():
-    with open(r"results.json") as file:
+    PATH = r"iowa_results.json"
+    with open(PATH) as file:
         data = json.load(file)
+        print(data)
     counties = list_to_unique_list([_clear_county(i) for i in data.keys()])
     percentages = []
     for county in counties:

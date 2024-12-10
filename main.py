@@ -119,8 +119,8 @@ def district_results_to_data(state: str, district: int):
     
 def main():
     COUNTY_DICT = {}
-    for district in range(1, 10):
-        for result in district_results_to_data("arizona", district):
+    for district in range(1, 5):
+        for result in district_results_to_data("iowa", district):
             name, *votes = result
             for key, vote in zip([f"{name} D", f"{name} R", f"{name} Total"],
                                  votes):
@@ -132,7 +132,7 @@ def main():
         print(f"{district} done")
         print(COUNTY_DICT)
         print(" ")
-    with open("results.json", "w") as file:
+    with open("iowa_results.json", "w") as file:
         json.dump(COUNTY_DICT, file)
 
 
