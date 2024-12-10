@@ -8,6 +8,23 @@ import json
 
 
 def soup_to_counties(soup: BeautifulSoup) -> list[BeautifulSoup]:
+    """Accesses counties from a BeautifulSoup representing a result page.
+
+    Args:
+        soup (BeautifulSoup): represents an entire page.
+
+    Returns:
+        A list of smaller BeautifulSoups representing
+        counties. Each contains information on the following:
+        (! represent fields of data used later)
+            * !the county's name! ('general');
+            * !the amount of votes cast! ('general');
+            * the percentage of votes calculate ('general')
+            * each candidate's name ('votes');
+            * !each candidate's party! ('votes');
+            * !the amount of votes each candidate got! ('votes');
+            * the percentage of votes each candidate got ('votes');
+    """
     return soup.find_all("div",
                         attrs={"data-testid": "county-row"})
 
