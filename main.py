@@ -45,11 +45,15 @@ def main():
     driver.get(url)
     driver.execute_script('document.title')
     time.sleep(3)
+    #driver.find_element("class name",
+    #                    "jsx-387977148 jsx-2732806902 more db").click()
     html = driver.page_source
     soup = BeautifulSoup(html)
+    print(soup)
     counties = soup_to_counties(soup)
     for i in counties:
         print(county_to_data(i))
+    driver.close()
 
 
 if __name__ == "__main__":
