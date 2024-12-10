@@ -50,11 +50,13 @@ def main():
                         "house-2-results-table-toggle")
     actions = ActionChains(driver)
     actions.move_to_element(element).click().perform()
+    time.sleep(3)
     html = driver.page_source
     soup = BeautifulSoup(html)
     counties = soup_to_counties(soup)
     for i in counties:
         print(county_to_data(i))
+    driver.close()
 
 
 
