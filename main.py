@@ -4,6 +4,7 @@ from selenium.webdriver.common.action_chains import ActionChains
 from selenium.common.exceptions import NoSuchElementException
 import requests
 import time
+import json
 
 
 def soup_to_counties(soup: BeautifulSoup) -> list[BeautifulSoup]:
@@ -65,15 +66,21 @@ def district_results_to_data(state: str, district: int):
 
 def main():
     COUNTY_DICT = {}
-    for result in district_results_to_data("arizona", "1"):
-        name, *votes = result
-        for key, vote in zip([f"{name} D", f"{name} R", f"{name} Total"],
-                             votes):
-            try:
-                COUNTY_DICT[key] += vote
-            except KeyError:
-                COUNTY_DICT[key] = vote
-    print(COUNTY_DICT)
+    for district in range(1, 10):
+        for result in district_results_to_data("arizona", district):
+            name, *votes = result
+            for key, vote in zip([f"{name} D", f"{name} R", f"{name} Total"],
+                                 votes):
+                try:
+                    COUNTY_DICT[key] += vote
+                except KeyError:
+                    COUNTY_DICT[key] = vote
+        time.sleep(6)
+        print(f"{district} done")
+        print(COUNTY_DICT)
+        print(" ")
+    with open("results.json", "w") as file:
+        json.dump(COUNTY_DICT, file)
 
 
 if __name__ == "__main__":
