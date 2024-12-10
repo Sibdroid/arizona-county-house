@@ -52,7 +52,7 @@ def county_to_data(county: BeautifulSoup) -> (str, list[int]):
     """Accesses name and votes from a BeautifulSoup representing a county.
 
     Args:
-        county: a BeautifulSoup returned by soup_to_counties.
+        county (BeautifulSoup): a BeautifulSoup returned by soup_to_counties.
 
     Returns:
         A tuple of two values:
@@ -79,6 +79,22 @@ def county_to_data(county: BeautifulSoup) -> (str, list[int]):
 
 
 def district_results_to_data(state: str, district: int):
+    """Accesses full county-level votes from a page representing a district.
+
+    Args:
+        state (str): the name of the state, written in lowercase.
+        district (int): the number of the district as a plain integer.
+        For example, a page representing "AZ-02" or "Arizona's second district"
+        can be accessed via district_results_to_data("arizona", 2).
+
+    Yields:
+        Tuples of the county name and list representing votes for Democrats,
+        Republicans and in total created by county_to_data().
+
+    Notes:
+        The function opens a web browser. It also sleeps for 3 to 6 seconds,
+        depending on whether the district has up to four counties or more.
+    """
     url = "https://www.nbcnews.com/politics/2024-elections/" \
     f"{state}-us-house-district-{district}-results"
     driver = webdriver.Chrome()
