@@ -30,6 +30,16 @@ def soup_to_counties(soup: BeautifulSoup) -> list[BeautifulSoup]:
 
 
 def general_to_info(general: BeautifulSoup) -> (str, int):
+    """Accesses name and vote count from 'general' section of county.
+
+    Args:
+        general (BeautifulSoup): a BeautifulSoup representing the
+        'general' part (see soup_to_counties function) of
+        the BeautifuLSoup representing the county.
+
+    Returns:
+        The county's name and the total amount of votes cast.
+    """
     name, *other, total_vote_count, percentage = general.find_all("span")
     name = name.find("span").text
     total_vote_count = total_vote_count.text
