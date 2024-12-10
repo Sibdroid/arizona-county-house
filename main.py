@@ -1,6 +1,7 @@
 from bs4 import BeautifulSoup
 from selenium import webdriver
 from selenium.webdriver.common.action_chains import ActionChains
+from selenium.common.exceptions import NoSuchElementException
 import requests
 import time
 
@@ -45,11 +46,14 @@ def district_results_to_data(state: str, district: int):
     driver.get(url)
     driver.execute_script('document.title')
     time.sleep(3)
-    element = driver.find_element("id",
-                        f"house-{district}-results-table-toggle")
-    actions = ActionChains(driver)
-    actions.move_to_element(element).click().perform()
-    time.sleep(3)
+    try:
+        element = driver.find_element("id",
+                            f"house-{district}-results-table-toggle")
+        actions = ActionChains(driver)
+        actions.move_to_element(element).click().perform()
+        time.sleep(3)
+    except NoSuchElementException:
+        pass
     html = driver.page_source
     soup = BeautifulSoup(html)
     counties = soup_to_counties(soup)
@@ -61,7 +65,7 @@ def district_results_to_data(state: str, district: int):
 
 def main():
     COUNTY_DICT = {}
-    for result in district_results_to_data("arizona", "2"):
+    for result in district_results_to_data("arizona", "1"):
         name, *votes = result
         for key, vote in zip([f"{name} D", f"{name} R", f"{name} Total"],
                              votes):
