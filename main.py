@@ -30,7 +30,7 @@ def soup_to_counties(soup: BeautifulSoup) -> list[BeautifulSoup]:
 
 
 def general_to_info(general: BeautifulSoup) -> (str, int):
-    """Accesses name and vote count from 'general' section of county.
+    """Accesses name and total vote count from 'general' section of county.
 
     Args:
         general (BeautifulSoup): a BeautifulSoup representing the
@@ -49,6 +49,17 @@ def general_to_info(general: BeautifulSoup) -> (str, int):
 
 
 def county_to_data(county: BeautifulSoup) -> (str, list[int]):
+    """Accesses name and votes from a BeautifulSoup representing a county.
+
+    Args:
+        county: a BeautifulSoup returned by soup_to_counties.
+
+    Returns:
+        A tuple of two values:
+            * the name of the county.
+            * the list of the votes: cast for Democrats, Republicans and
+              in total.
+    """
     general, votes, *other = county.find_all("div")
     name, total = general_to_info(general)
     dem = 0
@@ -90,7 +101,6 @@ def district_results_to_data(state: str, district: int):
     driver.close()
     
     
-
 def main():
     COUNTY_DICT = {}
     for district in range(1, 10):
