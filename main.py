@@ -1,5 +1,6 @@
 from bs4 import BeautifulSoup
 from selenium import webdriver
+from selenium.webdriver.common.action_chains import ActionChains
 import requests
 import time
 
@@ -45,15 +46,16 @@ def main():
     driver.get(url)
     driver.execute_script('document.title')
     time.sleep(3)
-    #driver.find_element("class name",
-    #                    "jsx-387977148 jsx-2732806902 more db").click()
+    element = driver.find_element("id",
+                        "house-2-results-table-toggle")
+    actions = ActionChains(driver)
+    actions.move_to_element(element).click().perform()
     html = driver.page_source
     soup = BeautifulSoup(html)
-    print(soup)
     counties = soup_to_counties(soup)
     for i in counties:
         print(county_to_data(i))
-    driver.close()
+
 
 
 if __name__ == "__main__":
